@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HSN — Proof of Reality</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0F14; --panel:#121821; --panel2:#0F141B; --line:#212B37;
+  --text:#E7ECF2; --sub:#8CA0B3; --faint:#5C6C7C;
+  --trust:#2FD1B3; --trustDim:#123B36;
+  --risk:#E8544A; --riskDim:#3A1A17;
+  --warn:#E3A73B;
+  font-family:'IBM Plex Sans',sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);min-height:100%;}
+.mono{font-family:'IBM Plex Mono',monospace}
+.wrap{max-width:1320px;margin:0 auto;padding:28px 32px 60px;}
+
+/* HEADER */
+header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:26px;}
+.brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
+.brand h1{font-size:34px;font-weight:700;margin:0;letter-spacing:-0.5px;}
+.brand .tag{font-size:15px;color:var(--sub);font-weight:500;}
+.subline{font-size:13.5px;color:var(--faint);margin-top:6px;}
+.credits{font-size:12px;color:var(--faint);text-align:right;}
+.credits b{color:var(--sub);font-weight:500;}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:1.15fr 1fr 0.85fr;gap:18px;margin-bottom:18px;}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px 22px;}
+.panel h2{font-size:12.5px;text-transform:uppercase;letter-spacing:0.08em;color:var(--sub);margin:0 0 14px;font-weight:600;}
+
+/* DEVICE MONITOR */
+.device-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.device-top .name{font-size:19px;font-weight:600;}
+.device-meta{color:var(--sub);font-size:13px;margin-top:4px;line-height:1.7;}
+.pill{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;}
+.pill.risk{background:var(--riskDim);color:var(--risk);}
+.pill.trust{background:var(--trustDim);color:var(--trust);}
+.conn{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--trust);margin-top:12px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--trust);}
+.last-verify{font-size:12px;color:var(--faint);margin-top:8px;}
+
+/* TRIANGLE */
+.tri-wrap{display:flex;align-items:center;justify-content:center;}
+.tri-caption{text-align:center;margin-top:10px;font-size:13px;color:var(--sub);}
+.tri-caption b{color:var(--text);}
+
+/* TRUST RING */
+.ring-wrap{display:flex;flex-direction:column;align-items:center;}
+.ring-num{font-size:38px;font-weight:700;font-family:'IBM Plex Mono',monospace;}
+.ring-label{font-size:12px;color:var(--sub);margin-top:2px;}
+.factors{width:100%;margin-top:16px;font-size:12.5px;}
+.factor{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--line);color:var(--sub);}
+.factor span.v{font-weight:600;}
+
+/* ALERT */
+.alert{border-radius:10px;border:1px solid var(--line);padding:18px 22px;margin-bottom:18px;}
+.alert.risk{background:linear-gradient(180deg,rgba(232,84,74,0.08),transparent);border-color:#3A2320;}
+.alert.trust{background:linear-gradient(180deg,rgba(47,209,179,0.08),transparent);border-color:#173A34;}
+.alert-head{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;}
+.alert-head .ind{width:9px;height:9px;border-radius:50%;}
+.alert-vals{display:flex;gap:34px;margin:14px 0 10px;flex-wrap:wrap;}
+.alert-vals div{font-size:12px;color:var(--faint);}
+.alert-vals div b{display:block;font-size:20px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-weight:600;margin-top:2px;}
+.alert p{margin:6px 0 0;font-size:13.5px;color:var(--sub);line-height:1.6;}
+.alert .note{font-size:12px;color:var(--faint);margin-top:10px;}
+
+/* METHOD FLOW */
+.flow{display:flex;align-items:center;gap:6px;overflow-x:auto;padding:6px 0;}
+.flow-step{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-width:150px;flex:1;text-align:center;}
+.flow-step .n{font-size:12px;color:var(--faint);margin-bottom:5px;}
+.flow-step .t{font-size:12.5px;font-weight:600;}
+.flow-arrow{color:var(--faint);font-size:16px;flex:0 0 auto;}
+
+/* SCENARIO SWITCH */
+.scenario-bar{display:flex;align-items:center;gap:14px;margin-bottom:18px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 20px;}
+.scenario-bar .lbl{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--sub);font-weight:600;}
+.scenario-bar .btns{display:flex;gap:8px;}
+.scn-btn{background:var(--panel2);border:1px solid var(--line);color:var(--sub);padding:9px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.scn-btn.active-trust{background:var(--trustDim);border-color:#1E5B51;color:var(--trust);}
+.scn-btn.active-risk{background:var(--riskDim);border-color:#5C2A24;color:var(--risk);}
+.scenario-bar .desc{font-size:12.5px;color:var(--faint);margin-left:auto;}
+
+/* GRAPH + EVIDENCE ROW */
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:18px;}
+.ev-row{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line);font-size:13px;}
+.ev-row:first-of-type{border-top:none;}
+.ev-row .v{font-weight:600;}
+.v.ok{color:var(--trust);} .v.bad{color:var(--risk);} .v.warn{color:var(--warn);}
+
+/* BUILDING */
+.bld{display:flex;gap:24px;align-items:center;}
+.bld svg{flex:0 0 auto;}
+.bld-legend{font-size:12px;color:var(--sub);display:flex;flex-direction:column;gap:8px;}
+.bld-legend .li{display:flex;align-items:center;gap:8px;}
+.bld-legend .sw{width:9px;height:9px;border-radius:2px;}
+
+/* FOOTER */
+.footer{text-align:center;padding-top:24px;border-top:1px solid var(--line);}
+.footer .msg{font-size:22px;font-weight:700;letter-spacing:0.02em;}
+.footer .flowline{font-size:12.5px;color:var(--faint);margin-top:10px;font-family:'IBM Plex Mono',monospace;}
+
+@media (max-width:980px){
+  .grid{grid-template-columns:1fr;}
+  .grid2{grid-template-columns:1fr;}
+  .scenario-bar{flex-wrap:wrap;}
+  .scenario-bar .desc{margin-left:0;width:100%;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="brand"><h1>HSN</h1><span class="tag">Proof of Reality</span></div>
+      <div class="subline">Verifying IoT claims against physical reality</div>
+    </div>
+    <div class="credits">Developed by<br><b>Safana • Lamar • Shahad • Wasaif • Ahmed</b></div>
+  </header>
+
+  <div class="scenario-bar">
+    <span class="lbl">Test Scenario</span>
+    <div class="btns">
+      <button class="scn-btn" id="btnA" onclick="setScenario('A')">A — Trusted</button>
+      <button class="scn-btn" id="btnB" onclick="setScenario('B')">B — Suspicious</button>
+    </div>
+    <span class="desc" id="scnDesc"></span>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>Monitored Device</h2>
+      <div class="device-top">
+        <div>
+          <div class="name">Temperature Sensor #01</div>
+          <div class="device-meta">Smart Building — Room 204<br>Environmental IoT Sensor</div>
+        </div>
+        <div class="pill" id="statusPill">HIGH RISK</div>
+      </div>
+      <div class="conn"><span class="dot"></span>Connection Active</div>
+      <div class="last-verify">Last verification · 10:42:18 AM</div>
+    </div>
+
+    <div class="panel">
+      <h2>Reality Triangle Verification</h2>
+      <div class="tri-wrap"><svg id="triSvg" width="290" height="220" viewBox="0 0 290 220"></svg></div>
+      <div class="tri-caption" id="triCaption">Mismatch Detected</div>
+    </div>
+
+    <div class="panel">
+      <h2>Dynamic Trust Score</h2>
+      <div class="ring-wrap">
+        <svg width="150" height="150" viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="62" fill="none" stroke="#1B242F" stroke-width="12"/>
+          <circle id="ringArc" cx="75" cy="75" r="62" fill="none" stroke-width="12" stroke-linecap="round" transform="rotate(-90 75 75)"/>
+        </svg>
+        <div style="margin-top:-96px;text-align:center;">
+          <div class="ring-num" id="trustNum">45%</div>
+        </div>
+        <div style="height:40px"></div>
+        <div class="ring-label" id="trustLabel">HIGH RISK</div>
+        <div class="factors" id="factorsBox"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert" id="alertBox">
+    <div class="alert-head"><span class="ind" id="alertInd"></span><span id="alertTitle">Inconsistency Detected</span></div>
+    <div class="alert-vals">
+      <div>Digital Claim<b id="valClaim">22°C</b></div>
+      <div>Physical Evidence<b id="valPhys">27°C</b></div>
+      <div>Difference<b id="valDiff">5°C</b></div>
+    </div>
+    <p id="alertMsg">The device claim does not match independent physical evidence.</p>
+    <div class="note" id="alertNote">HSN has identified a potential reliability or security issue and increased the device's risk classification. A mismatch does not confirm hacking — it may indicate malfunction, manipulation, compromise, or tampering.</div>
+  </div>
+
+  <div class="panel" style="margin-bottom:18px;">
+    <h2>HSN Verification Methodology</h2>
+    <div class="flow">
+      <div class="flow-step"><div class="n">01</div><div class="t">IoT Device Claim</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">02</div><div class="t">Reality Triangle Verification</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">03</div><div class="t">Inconsistency Check</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">04</div><div class="t">Physical Challenge-Response Auth (PCRA)</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">05</div><div class="t">Dynamic Trust Score</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">06</div><div class="t">Security Classification</div></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h2>Trust Score Over Time</h2>
+      <svg id="graphSvg" width="100%" height="180" viewBox="0 0 640 180" preserveAspectRatio="none"></svg>
+    </div>
+    <div class="panel">
+      <h2>Evidence &amp; Security Panel</h2>
+      <div id="evBox"></div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-bottom:18px;">
+    <h2>Smart Building — Connected Devices</h2>
+    <div class="bld">
+      <svg width="360" height="180" viewBox="0 0 360 180">
+        <rect x="10" y="10" width="340" height="160" fill="none" stroke="#212B37" stroke-width="1.5" rx="4"/>
+        <line x1="10" y1="90" x2="350" y2="90" stroke="#212B37"/>
+        <line x1="180" y1="10" x2="180" y2="170" stroke="#212B37"/>
+        <!-- room 204 highlighted -->
+        <rect x="10" y="10" width="170" height="80" fill="#3A1A17" stroke="var(--risk)" stroke-width="1.5" rx="3"/>
+        <text x="20" y="26" fill="#E8544A" font-size="10" font-family="IBM Plex Mono">ROOM 204</text>
+        <circle cx="95" cy="55" r="6" fill="#E8544A"/>
+        <text x="106" y="59" fill="#E8544A" font-size="9" font-family="IBM Plex Mono">TEMP #01</text>
+        <!-- other rooms -->
+        <text x="192" y="26" fill="#5C6C7C" font-size="10" font-family="IBM Plex Mono">ROOM 205</text>
+        <circle cx="260" cy="55" r="5" fill="#2FD1B3"/>
+        <text x="20" y="112" fill="#5C6C7C" font-size="10" font-family="IBM Plex Mono">ROOM 206</text>
+        <circle cx="70" cy="140" r="5" fill="#2FD1B3"/>
+        <circle cx="120" cy="140" r="5" fill="#2FD1B3"/>
+        <text x="192" y="112" fill="#5C6C7C" font-size="10" font-family="IBM Plex Mono">ROOM 207</text>
+        <circle cx="260" cy="140" r="5" fill="#2FD1B3"/>
+        <circle cx="300" cy="140" r="5" fill="#2FD1B3"/>
+      </svg>
+      <div class="bld-legend">
+        <div class="li"><span class="sw" style="background:#E8544A"></span>Device under investigation</div>
+        <div class="li"><span class="sw" style="background:#2FD1B3"></span>Sensor, lock, camera, HVAC, or light — nominal</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="msg">TRUST WHAT CAN BE VERIFIED.</div>
+    <div class="flowline">Device Claim → Physical + Environmental Evidence → Reality Verification → Mismatch Detection → Dynamic Trust Score → Security Classification</div>
+  </div>
+
+</div>
+
+<script>
+const S = {
+  A:{claim:22,phys:22,env:"Consistent",envOk:true,trust:95,cls:"TRUSTED",diff:0,
+     graph:[95,95,96,95,94,95,95], mismatchAt:-1,
+     factors:[["Digital Consistency","Consistent",true],["Physical Consistency","Match",true],["Environmental Consistency","Consistent",true],["PCRA Result","Passed",true]],
+     evidence:[["Device Identity","Verified",1],["Digital Claim","Confirmed",1],["Physical Evidence","Match",1],["Environmental Evidence","Consistent",1],["PCRA","Passed",1],["Trust Score","95%",1],["Classification","Trusted",1]]},
+  B:{claim:22,phys:27,env:"Inconsistent",envOk:false,trust:45,cls:"HIGH RISK",diff:5,
+     graph:[100,98,96,94,92,75,45], mismatchAt:5,
+     factors:[["Digital Consistency","Inconsistent",false],["Physical Consistency","Mismatch",false],["Environmental Consistency","Inconsistent",false],["PCRA Result","Failed",false]],
+     evidence:[["Device Identity","Verified",1],["Digital Claim","Under Review",0],["Physical Evidence","Mismatch",-1],["Environmental Evidence","Inconsistent",-1],["PCRA","Failed",-1],["Trust Score","45%",-1],["Classification","High Risk",-1]]}
+};
+
+function triSVG(risk){
+  const good="#2FD1B3", bad="#E8544A", c = risk?bad:good;
+  const p1=[145,20], p2=[30,190], p3=[260,190], ctr=[145,140];
+  return `
+  <line x1="${p1[0]}" y1="${p1[1]}" x2="${p2[0]}" y2="${p2[1]}" stroke="${c}" stroke-width="1.5" stroke-dasharray="${risk?'4 3':''}"/>
+  <line x1="${p1[0]}" y1="${p1[1]}" x2="${p3[0]}" y2="${p3[1]}" stroke="${c}" stroke-width="1.5" stroke-dasharray="${risk?'4 3':''}"/>
+  <line x1="${p2[0]}" y1="${p2[1]}" x2="${p3[0]}" y2="${p3[1]}" stroke="${c}" stroke-width="1.5" stroke-dasharray="${risk?'4 3':''}"/>
+  <circle cx="${ctr[0]}" cy="${ctr[1]}" r="30" fill="#0F141B" stroke="${c}" stroke-width="1.5"/>
+  <text x="${ctr[0]}" y="${ctr[1]-3}" text-anchor="middle" fill="${c}" font-size="8" font-family="IBM Plex Mono" font-weight="600">RTV</text>
+  <text x="${ctr[0]}" y="${ctr[1]+9}" text-anchor="middle" fill="#8CA0B3" font-size="7.5">${risk?'Mismatch':'Aligned'}</text>
+  <circle cx="${p1[0]}" cy="${p1[1]}" r="26" fill="#121821" stroke="${c}" stroke-width="1.5"/>
+  <text x="${p1[0]}" y="${p1[1]-1}" text-anchor="middle" fill="#E7ECF2" font-size="12" font-family="IBM Plex Mono" font-weight="600">${S.currentClaim}°C</text>
+  <text x="${p1[0]}" y="${p1[1]+42}" text-anchor="middle" fill="#8CA0B3" font-size="8">DIGITAL CLAIM</text>
+  <circle cx="${p2[0]}" cy="${p2[1]}" r="26" fill="#121821" stroke="${c}" stroke-width="1.5"/>
+  <text x="${p2[0]}" y="${p2[1]-1}" text-anchor="middle" fill="#E7ECF2" font-size="12" font-family="IBM Plex Mono" font-weight="600">${S.currentPhys}°C</text>
+  <text x="${p2[0]}" y="${p2[1]+42}" text-anchor="middle" fill="#8CA0B3" font-size="8">PHYSICAL EVIDENCE</text>
+  <circle cx="${p3[0]}" cy="${p3[1]}" r="26" fill="#121821" stroke="${c}" stroke-width="1.5"/>
+  <text x="${p3[0]}" y="${p3[1]-1}" text-anchor="middle" fill="#E7ECF2" font-size="9.5" font-family="IBM Plex Mono" font-weight="600">${risk?'INCONSIST.':'CONSISTENT'}</text>
+  <text x="${p3[0]}" y="${p3[1]+42}" text-anchor="middle" fill="#8CA0B3" font-size="8">ENVIRONMENT</text>
+  `;
+}
+
+function ringArc(pct, ok){
+  const r=62, c=2*Math.PI*r;
+  document.getElementById('ringArc').setAttribute('stroke', ok?'#2FD1B3':'#E8544A');
+  document.getElementById('ringArc').setAttribute('stroke-dasharray', `${c*pct/100} ${c}`);
+}
+
+function graphSVG(vals, mismatchAt, ok){
+  const W=640,H=180,pad=30;
+  const max=100,min=30;
+  const pts = vals.map((v,i)=>{
+    const x = pad + i*(W-2*pad)/(vals.length-1);
+    const y = H-pad - (v-min)/(max-min)*(H-2*pad);
+    return [x,y,v];
+  });
+  const line = pts.map(p=>p[0]+','+p[1]).join(' ');
+  let dots='', labels='';
+  pts.forEach((p,i)=>{
+    const col = (mismatchAt>=0 && i>=mismatchAt) ? '#E8544A' : '#2FD1B3';
+    dots += `<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="${col}"/>`;
+    labels += `<text x="${p[0]}" y="${H-8}" text-anchor="middle" fill="#5C6C7C" font-size="9">${p[2]}%</text>`;
+  });
+  let markLine='';
+  if(mismatchAt>=0){
+    const mx = pts[mismatchAt][0];
+    markLine = `<line x1="${mx}" y1="${pad-10}" x2="${mx}" y2="${H-pad}" stroke="#E8544A" stroke-width="1" stroke-dasharray="3 3"/>
+    <text x="${mx}" y="${pad-14}" text-anchor="middle" fill="#E8544A" font-size="10" font-weight="600">Mismatch Detected</text>`;
+  }
+  return `<polyline points="${line}" fill="none" stroke="${ok?'#2FD1B3':'#E8544A'}" stroke-width="2"/>${dots}${labels}${markLine}`;
+}
+
+function factorRows(list){
+  return list.map(([k,v,ok])=>`<div class="factor"><span>${k}</span><span class="v" style="color:${ok?'#2FD1B3':'#E8544A'}">${v}</span></div>`).join('');
+}
+function evRows(list){
+  return list.map(([k,v,s])=>`<div class="ev-row"><span>${k}</span><span class="v ${s>0?'ok':s<0?'bad':'warn'}">${v}</span></div>`).join('');
+}
+
+function setScenario(key){
+  const d = S[key];
+  S.currentClaim = d.claim; S.currentPhys = d.phys;
+  const risk = key==='B';
+
+  document.getElementById('btnA').className = 'scn-btn' + (key==='A'?' active-trust':'');
+  document.getElementById('btnB').className = 'scn-btn' + (key==='B'?' active-risk':'');
+  document.getElementById('scnDesc').textContent = risk
+    ? 'Reality disagrees with the device — trust decreases, risk increases.'
+    : 'Reality agrees with the device — trust remains high.';
+
+  document.getElementById('statusPill').textContent = d.cls;
+  document.getElementById('statusPill').className = 'pill ' + (risk?'risk':'trust');
+
+  document.getElementById('triSvg').innerHTML = triSVG(risk);
+  document.getElementById('triCaption').innerHTML = risk ? 'Mismatch Detected' : 'Sources Aligned — <b>Consistent</b>';
+
+  document.getElementById('trustNum').textContent = d.trust+'%';
+  document.getElementById('trustNum').style.color = risk?'#E8544A':'#2FD1B3';
+  document.getElementById('trustLabel').textContent = d.cls;
+  ringArc(d.trust, !risk);
+  document.getElementById('factorsBox').innerHTML = factorRows(d.factors);
+
+  const alertBox = document.getElementById('alertBox');
+  alertBox.className = 'alert ' + (risk?'risk':'trust');
+  document.getElementById('alertInd').style.background = risk?'#E8544A':'#2FD1B3';
+  document.getElementById('alertTitle').textContent = risk ? 'Inconsistency Detected' : 'Sources Consistent';
+  document.getElementById('valClaim').textContent = d.claim+'°C';
+  document.getElementById('valPhys').textContent = d.phys+'°C';
+  document.getElementById('valDiff').textContent = d.diff+'°C';
+  document.getElementById('alertMsg').textContent = risk
+    ? 'The device claim does not match independent physical evidence.'
+    : 'The device claim matches independent physical and environmental evidence.';
+  document.getElementById('alertNote').style.display = risk ? 'block' : 'none';
+
+  document.getElementById('graphSvg').innerHTML = graphSVG(d.graph, d.mismatchAt, !risk);
+  document.getElementById('evBox').innerHTML = evRows(d.evidence);
+}
+
+setScenario('B');
+</script>
+</body>
+</html>
